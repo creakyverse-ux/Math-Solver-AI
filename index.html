@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>image math solver</title>
+
   <style>
     :root{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;margin:0}
     body{display:flex;flex-direction:column;gap:16px;max-width:900px;margin:28px auto;padding:16px}
@@ -16,7 +17,17 @@
     footer{display:flex;gap:8px;flex-wrap:wrap}
     .small{font-size:13px}
   </style>
+
+  <!-- mathjax so ur latex actually renders 😭🙏 -->
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+      svg: { fontCache: 'global' }
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 </head>
+
 <body>
   <div class="card">
     <header>
@@ -59,24 +70,16 @@
     reader.readAsDataURL(f)
   })
 
-  // simple markdown renderer (bold, italics, lists, headings)
-  function renderMarkdown(md) {
-    return md
-      .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-      .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-      .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-      .replace(/\*\*(.*?)\*\*/gim, '<b>$1</b>')
-      .replace(/\*(.*?)\*/gim, '<i>$1</i>')
-      .replace(/^\s*[-*] (.*)/gim, '<li>$1</li>')
-      .replace(/\n{2,}/g, '<br><br>')
-  }
-
+  // updated show() so mathjax renders the latex symbols 😭🙏
   function show(msg) {
-    responseEl.innerHTML = renderMarkdown(msg)
+    responseEl.innerHTML = msg
+    if (window.MathJax) {
+      MathJax.typesetPromise()
+    }
   }
 
   sendButton.addEventListener('click', async () => {
-    if (!lastBase64) return show("choose an image first")
+    if (!lastBase64) return show("choose an image first 😭")
 
     show("sending…")
 
@@ -120,5 +123,6 @@
     }
   })
 </script>
+
 </body>
 </html>
